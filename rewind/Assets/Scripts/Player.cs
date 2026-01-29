@@ -1,7 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [Header("Info")]
+    // public HealthBar healthBar;
+    public Image healthBar;
+    public float hpValue = 1;
+    public float currentHealth = 4f;
+    public float maxHealth = 4f;
+
+
     [Header("Movement")]
     public float moveSpeed = 5f;
 
@@ -16,6 +25,11 @@ public class Player : MonoBehaviour
     [Header("Combat")]
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public Image EnergyBar;
+    public float EnergyValue = 1;
+    public float maxEnergy = 5f;
+    public float currentEnergy = 5f;
+
 
     SpriteRenderer spriteRenderer;
     Animator anim;
@@ -61,27 +75,94 @@ public class Player : MonoBehaviour
         {
             ReturnAllBullets();
         }
+
+        // HP바 UI
+        if (currentHealth >= maxHealth)
+        {
+            hpValue = 1;
+            healthBar.fillAmount = hpValue;
+        }
+
+        else if (currentHealth <= 0)
+        {
+            hpValue = 0;
+            healthBar.fillAmount = hpValue;
+
+            // 사망 처리 추가
+
+        }
+
+        else
+        {
+            hpValue = currentHealth / maxHealth;
+            healthBar.fillAmount = hpValue;
+        }
+
+        // 에너지바 UI
+        if (currentEnergy >= maxEnergy)
+        {
+            EnergyValue = 1;
+            EnergyBar.fillAmount = EnergyValue;
+        }
+        else if (currentEnergy <= 0)
+        {
+            EnergyValue = 0;
+            EnergyBar.fillAmount = EnergyValue;
+
+        }
+        else
+        {
+            EnergyValue = currentEnergy / maxEnergy;
+            EnergyBar.fillAmount = EnergyValue;
+        }
+
     }
+
+
+
+
+    // void OnHit(float damage)
+    // {  
+    // }
 
     void Fire()
     {
-        // 마우스 위치로 방향 계산
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 dir = (Vector2)(mousePos - firePoint.position).normalized;
+        if (currentEnergy <= 0)
+        {
+            return;
+        }
+        else
+        {
+            // 마우스 위치로 방향 계산
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 dir = (Vector2)(mousePos - firePoint.position).normalized;
 
-        GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-        bulletObj.GetComponent<Bullet>().Launch(dir);
-        anim.SetTrigger("Shoot");
+            GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+            bulletObj.GetComponent<Bullet>().Launch(dir);
+            anim.SetTrigger("Shoot");
+            currentEnergy--;
+        }
     }
 
     void ReturnAllBullets()
     {
-        // 씬에 있는 모든 탄환을 찾아 돌아오게 함 (최적화는 나중에!)
-        Bullet[] bullets = FindObjectsByType<Bullet>(FindObjectsSortMode.None);
-        foreach (Bullet b in bullets)
+        if (currentEnergy == maxEnergy)
         {
-            b.StartReturn();
+            return;
         }
+        else
+        {
+            anim.SetTrigger("Rewind");
+            // 씬에 있는 모든 탄환을 찾아 돌아오게 함 (최적화는 나중에!)
+            Bullet[] bullets = FindObjectsByType<Bullet>(FindObjectsSortMode.None);
+            foreach (Bullet b in bullets)
+            {
+                b.StartReturn();
+            }
+
+            currentEnergy = maxEnergy;
+        }
+
     }
 
     void FixedUpdate()
