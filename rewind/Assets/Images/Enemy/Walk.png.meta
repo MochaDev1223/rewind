@@ -131,10 +131,10 @@ TextureImporter:
       name: Walk_0
       rect:
         serializedVersion: 2
-        x: 26
-        y: 18
-        width: 34
-        height: 26
+        x: 0
+        y: 0
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,10 +153,10 @@ TextureImporter:
       name: Walk_1
       rect:
         serializedVersion: 2
-        x: 106
-        y: 16
-        width: 34
-        height: 27
+        x: 80
+        y: 0
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -175,10 +175,10 @@ TextureImporter:
       name: Walk_2
       rect:
         serializedVersion: 2
-        x: 186
-        y: 15
-        width: 34
-        height: 26
+        x: 160
+        y: 0
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -197,10 +197,10 @@ TextureImporter:
       name: Walk_3
       rect:
         serializedVersion: 2
-        x: 266
-        y: 18
-        width: 34
-        height: 26
+        x: 240
+        y: 0
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -219,10 +219,10 @@ TextureImporter:
       name: Walk_4
       rect:
         serializedVersion: 2
-        x: 346
-        y: 16
-        width: 34
-        height: 27
+        x: 320
+        y: 0
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -241,10 +241,10 @@ TextureImporter:
       name: Walk_5
       rect:
         serializedVersion: 2
-        x: 426
-        y: 15
-        width: 34
-        height: 27
+        x: 400
+        y: 0
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -263,7 +263,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 2d909e901b33b704882aa6264cce75b5
     internalID: 0
     vertices: []
     indices: 
