@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour
         {
             anim.SetTrigger("isDead");
         }
-
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.EnemyDie);
         // 모든 움직임 정지
         if (rb != null)
         {
@@ -241,7 +241,7 @@ public class Enemy : MonoBehaviour
     {
         if (bulletPrefab == null || firePoint == null) return;
         anim.SetTrigger("Attack");
-
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.EnemyShoot);
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
 

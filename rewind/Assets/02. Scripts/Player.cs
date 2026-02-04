@@ -172,6 +172,7 @@ public class Player : MonoBehaviour
             bulletObj.GetComponent<Bullet>().Launch(dir);
             anim.SetTrigger("Shoot");
             currentEnergy--;
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.PlayerShoot);
         }
     }
 
