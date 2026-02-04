@@ -79,17 +79,40 @@ public class Bullet : MonoBehaviour
     // Collision 대신 Trigger를 사용합니다.
     void OnTriggerEnter2D(Collider2D other)
     {
-        // if (!isReturning && (other.CompareTag("Ground") || other.CompareTag("Enemy")))
-        if (!isReturning && (other.CompareTag("Ground")))
+        if (!isReturning && other.CompareTag("Enemy"))
+        {
+
+            // 적에게 데미지 입히기
+            Enemy enemy = other.GetComponent<Enemy>();
+            Animator enemyAnim = enemy.GetComponent<Animator>();
+
+            if (enemy != null)
+            {
+                enemy.EnemyHP -= 1f;
+                if (enemy.EnemyHP >= 1)
+                {
+                    enemyAnim.SetTrigger("Hit");
+                }    
+            }
+
+            // 이펙트 생성
+            GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
+            Destroy(effect, 0.2f);
+
+            // 적에게는 박히지 않고 바로 리턴
+            StartReturn();
+        }
+        else if (!isReturning && other.CompareTag("Ground"))
         {
             // Trigger는 물리적 힘을 전달하지 않으므로 적이 전혀 밀리지 않습니다.
             Embed(other.transform);
 
             // Vector2 hitPoint = other.ClosestPoint(transform.position);
-            GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity); // 수정할 곳 여기야
+            GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
             Destroy(effect, 0.2f);
         }
     }
+
 
     void Embed(Transform target)
     {

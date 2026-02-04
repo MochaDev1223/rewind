@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class Player : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class Player : MonoBehaviour
     public float hpValue = 1;
     public float currentHealth = 4f;
     public float maxHealth = 4f;
+    private bool isDead = false;
+    public GameObject GameOverUI;
 
 
     [Header("Movement")]
@@ -55,6 +59,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return;
+
         horiz = Input.GetAxisRaw("Horizontal");
 
         // 점프 입력을 "즉시 점프"하지 않고
@@ -89,6 +95,7 @@ public class Player : MonoBehaviour
             healthBar.fillAmount = hpValue;
 
             // 사망 처리 추가
+            CheckDeath();
 
         }
 
@@ -118,12 +125,36 @@ public class Player : MonoBehaviour
 
     }
 
+    void CheckDeath()
+    {
+        if (currentHealth <= 0 && !isDead)
+        {
+            PlayerDie();
+        }
+    }
 
+    void PlayerDie()
+    {
+        isDead = true;
+        if (currentHealth <= 0)
+        {
+            anim.SetTrigger("Dead");
+        }
+        if (rigid != null)
+        {
+            rigid.linearVelocity = Vector2.zero;
+            rigid.bodyType = RigidbodyType2D.Kinematic; // 물리 엔진 영향 제거
+            rigid.simulated = false;
+        }
+        StartCoroutine(GameOverRoutine());
 
+    }
 
-    // void OnHit(float damage)
-    // {  
-    // }
+    IEnumerator GameOverRoutine()
+    {
+        yield return new WaitForSeconds(1.5f);
+        GameOverUI.SetActive(true);
+    }
 
     void Fire()
     {
@@ -167,6 +198,8 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return;
+
         rigid.linearVelocity = new Vector2(horiz * moveSpeed, rigid.linearVelocity.y);
 
 
