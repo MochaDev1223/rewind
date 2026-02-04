@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return;
+        if (GameManager.isPaused || isDead) return;
 
         horiz = Input.GetAxisRaw("Horizontal");
 

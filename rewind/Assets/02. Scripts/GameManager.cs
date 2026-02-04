@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static bool isPaused = false;
+
     public GameObject btnRestart;
     public GameObject btnPause;
     public GameObject btnPlay;
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour
     {
         // 게임이 멈춤
         Time.timeScale = 0f;
+        isPaused = true;
         PauseMenu.SetActive(true);
         btnPause.SetActive(false);
         btnPlay.SetActive(true);
@@ -61,6 +64,7 @@ public class GameManager : MonoBehaviour
 
         // 게임이 다시 동작
         Time.timeScale = 1f;
+        isPaused = false;
         PauseMenu.SetActive(false);
         btnPause.SetActive(true);
         btnPlay.SetActive(false);
