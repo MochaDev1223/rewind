@@ -139,6 +139,7 @@ public class Player : MonoBehaviour
         if (currentHealth <= 0)
         {
             anim.SetTrigger("Dead");
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.GameOver);
         }
         if (rigid != null)
         {
@@ -197,13 +198,17 @@ public class Player : MonoBehaviour
 
     }
 
+    void MoveSound()
+    {
+        
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.PlayerMove);
+    }
+
     void FixedUpdate()
     {
         if (isDead) return;
 
         rigid.linearVelocity = new Vector2(horiz * moveSpeed, rigid.linearVelocity.y);
-
-
         // 방향 전환
         if (Input.GetButton("Horizontal"))
         {
@@ -211,13 +216,7 @@ public class Player : MonoBehaviour
         }
 
         // // 걷기 애니메이션
-        anim.SetBool("isWalk", Mathf.Abs(rigid.linearVelocity.x) > 0.2f);
-        // if (Mathf.Abs(rigid.linearVelocity.x) < 0.2)
-        // {
-        //     anim.SetBool("isWalk", false);
-        // }
-        // else
-        //     anim.SetBool("isWalk", true);
+        anim.SetBool("isWalk", Mathf.Abs(rigid.linearVelocity.x) > 0.2f);      
 
         // Ground Check
         Vector2 rayOrigin = (Vector2)transform.position
@@ -278,6 +277,7 @@ public class Player : MonoBehaviour
             );
 
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.PlayerJump);
 
             // 타이머 소모
             jumpBufferTimer = 0f;

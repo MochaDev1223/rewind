@@ -11,6 +11,7 @@ public class Enemy_Bullet : MonoBehaviour
             // 플레이어 데미지 처리
             Player player = collision.GetComponent<Player>();
             Animator playerAnim = player.GetComponent<Animator>();
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.PlayerHit);
             if (player != null)
             {
                 player.currentHealth -= damage; // 플레이어 체력 1 감소
