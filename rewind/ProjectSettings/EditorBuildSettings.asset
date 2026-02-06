@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01. Scenes/Stage1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/01. Scenes/FakeLoading.unity
+    guid: 7a17af93087a2274d909951ebd247ab8
+  - enabled: 1
+    path: Assets/01. Scenes/BossStage1.unity
+    guid: f3459393c31bbf34e9cf61bf56d9df10
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   m_UseUCBPForAssetBundles: 0

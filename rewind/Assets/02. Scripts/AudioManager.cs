@@ -21,7 +21,8 @@ public class AudioManager : MonoBehaviour
 
     public enum Sfx
     {
-        Select, PlayerShoot, EnemyShoot, EnemyDie, PlayerJump, PlayerHit, PlayerMove, GameOver
+        Select, PlayerShoot, EnemyShoot, EnemyDie, PlayerJump, PlayerHit, PlayerMove, 
+        GameOver, Loading, BossDie, BossAlert, GameVictory
     }
 
     void Awake()

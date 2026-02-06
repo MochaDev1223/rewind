@@ -143,77 +143,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Background Props_1
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 5
-        width: 14
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 265f61e68b3132d10800000000000000
-      internalID: 2099543534126691682
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Background Props_2
-      rect:
-        serializedVersion: 2
-        x: 153
-        y: 9
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8ba73475ca095dc10800000000000000
-      internalID: 2077725872974166712
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Background Props_3
-      rect:
-        serializedVersion: 2
-        x: 180
-        y: 0
-        width: 13
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9874a111214c91da0800000000000000
-      internalID: -5973527848854861943
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7247ac58f082def4d9eeb1dbed295b03
     internalID: 0
     vertices: []
     indices: 
@@ -224,9 +158,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       Background Props_0: -537221702989897742
-      Background Props_1: 2099543534126691682
-      Background Props_2: 2077725872974166712
-      Background Props_3: -5973527848854861943
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

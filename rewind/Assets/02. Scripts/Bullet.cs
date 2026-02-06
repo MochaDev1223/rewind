@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -5,18 +6,20 @@ public class Bullet : MonoBehaviour
     public float flySpeed = 15f;
     public float returnSpeed = 25f;
     public float maxDistance = 25f;
-
+    public float damage = 1f; // 데미지를 변수로 설정
+    
     private Rigidbody2D rigid;
     private Transform player;
     private bool isReturning = false;
     private bool isEmbedded = false;
-    private Collider2D col; // 콜라이더 캐싱
-    public GameObject bulletEffect; // 인스펙터에서 이펙트 담당
+    private Collider2D col;
+    public GameObject bulletEffect;
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-        // 씬에서 Player 태그를 가진 오브젝트를 찾습니다.
+        col = GetComponent<Collider2D>();
+        
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null) player = playerObj.transform;
     }
@@ -25,16 +28,17 @@ public class Bullet : MonoBehaviour
     {
         rigid.linearVelocity = direction * flySpeed;
         RotateTowards(direction);
-        // // 탄환이 날아가는 방향을 바라보게 회전 (선택 사항)
-        // float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        // transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     void Update()
     {
         if (isReturning)
         {
-            if (player == null) return;
+            if (player == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
             // 플레이어에게 부드럽게 돌아오기
             transform.position = Vector2.MoveTowards(transform.position, player.position, returnSpeed * Time.deltaTime);
@@ -56,70 +60,107 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    // 방향을 입력받아 그쪽을 바라보게 회전시키는 헬퍼 함수
     void RotateTowards(Vector2 direction)
     {
         if (direction == Vector2.zero) return;
 
-        // 아크탄젠트(Atan2)로 벡터의 각도 계산 (라디안 -> 도)
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        // Z축을 기준으로 회전 적용
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     // 돌아오는 중이 아닐 때만 박힘 (Ground나 Enemy 레이어/태그 확인)
-    //     if (!isReturning && (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Enemy")))
-    //     {
-    //         Embed(collision.transform);
-    //     }
-    // }
-
-    // Collision 대신 Trigger를 사용합니다.
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isReturning && other.CompareTag("Enemy"))
+        if (isReturning) return; // 돌아오는 중에는 충돌 무시
+
+        // Enemy 태그 체크 (일반 적)
+        if (other.CompareTag("Enemy"))
         {
+            HandleEnemyHit(other);
+        }
+        // Boss 태그 체크 (보스)
+        else if (other.CompareTag("Boss"))
+        {
+            HandleBossHit(other);
+        }
+        // Ground 태그 체크
+        else if (other.CompareTag("Ground"))
+        {
+            HandleGroundHit(other);
+        }
+    }
 
-            // 적에게 데미지 입히기
-            Enemy enemy = other.GetComponent<Enemy>();
-            Animator enemyAnim = enemy.GetComponent<Animator>();
-
-            if (enemy != null)
+    // 일반 적 처리
+    void HandleEnemyHit(Collider2D enemyCollider)
+    {
+        Enemy enemy = enemyCollider.GetComponent<Enemy>();
+        
+        if (enemy != null)
+        {
+            // 데미지 적용
+            enemy.EnemyHP -= damage;
+            
+            // Hit 애니메이션 재생 (죽지 않았을 때만)
+            if (enemy.EnemyHP > 0)
             {
-                enemy.EnemyHP -= 1f;
-                if (enemy.EnemyHP >= 1)
+                Animator enemyAnim = enemy.GetComponent<Animator>();
+                if (enemyAnim != null)
                 {
                     enemyAnim.SetTrigger("Hit");
-                }    
+                }
             }
-
-            // 이펙트 생성
-            GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
-            Destroy(effect, 0.2f);
-
-            // 적에게는 박히지 않고 바로 리턴
-            StartReturn();
         }
-        else if (!isReturning && other.CompareTag("Ground"))
-        {
-            // Trigger는 물리적 힘을 전달하지 않으므로 적이 전혀 밀리지 않습니다.
-            Embed(other.transform);
 
-            // Vector2 hitPoint = other.ClosestPoint(transform.position);
+        // 이펙트 생성
+        SpawnEffect();
+
+        // 적에게는 박히지 않고 바로 리턴
+        StartReturn();
+    }
+
+    // 보스 처리
+    void HandleBossHit(Collider2D bossCollider)
+    {
+        BossEnemy boss = bossCollider.GetComponent<BossEnemy>();
+        
+        if (boss != null && boss.IsBattleStarted())
+        {
+            // 전투 시작 후에만 데미지 적용
+            boss.EnemyHP -= damage;
+        }
+
+        // 이펙트 생성
+        SpawnEffect();
+
+        // 보스에게도 박히지 않고 바로 리턴
+        StartReturn();
+    }
+
+    // 땅 처리
+    void HandleGroundHit(Collider2D groundCollider)
+    {
+        // 이펙트 생성
+        SpawnEffect();
+        
+        // 땅에 박힘
+        Embed(groundCollider.transform);
+    }
+
+    // 이펙트 생성 헬퍼 함수
+    void SpawnEffect()
+    {
+        if (bulletEffect != null)
+        {
             GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
             Destroy(effect, 0.2f);
         }
     }
-
 
     void Embed(Transform target)
     {
         isEmbedded = true;
         rigid.linearVelocity = Vector2.zero;
-        rigid.bodyType = RigidbodyType2D.Kinematic; // 물리 엔진 영향 정지
-        transform.SetParent(target, true); // 박힌 대상(적/움직이는 발판 등)을 따라다님
+        rigid.bodyType = RigidbodyType2D.Kinematic;
+        transform.SetParent(target, true);
     }
 
     public void StartReturn()
@@ -128,7 +169,10 @@ public class Bullet : MonoBehaviour
         isEmbedded = false;
         transform.SetParent(null);
 
-        // 박혀있던 물리 설정을 풀고 Trigger로 바꿔서 벽을 뚫고 오게 함
-        GetComponent<Collider2D>().isTrigger = true;
+        // Trigger로 바꿔서 벽을 뚫고 오게 함
+        if (col != null)
+        {
+            col.isTrigger = true;
+        }
     }
 }
