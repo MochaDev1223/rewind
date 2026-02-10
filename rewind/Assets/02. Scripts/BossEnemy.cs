@@ -5,6 +5,9 @@ public class BossEnemy : MonoBehaviour
 {
     [Header("HP Settings")]
     public float EnemyHP = 20f;
+    public float MaxEnemyHP = 20f;
+    public float EnemyHPvalue = 1f;
+    [SerializeField] private Slider _hpBar;
 
     [Header("Attack Settings")]
     [SerializeField] private GameObject bulletPrefab;
@@ -57,6 +60,9 @@ public class BossEnemy : MonoBehaviour
         {
             AttackPlayer();
         }
+
+        EnemyHPvalue =  EnemyHP / MaxEnemyHP;
+        _hpBar.value = EnemyHPvalue;
     }
 
     // AlertTextUI에서 호출할 함수
@@ -69,6 +75,7 @@ public class BossEnemy : MonoBehaviour
     {
         return battleStarted;
     }
+
 
     void CheckDeath()
     {
@@ -89,6 +96,19 @@ public class BossEnemy : MonoBehaviour
 
         AudioManager.instance.PlaySfx(AudioManager.Sfx.BossDie); // 보스용 사운드
 
+        // 강한 카메라 쉐이크
+        if (CameraShake.instance != null)
+        {
+            // 방법 1: 보스 전용 강한 쉐이크
+            CameraShake.instance.ShakeBossDeath();
+
+            // 방법 2: 회전 포함 쉐이크 (더 극적인 효과)
+            // CameraShake.instance.ShakeWithRotation(1.0f, 0.5f, 5f);
+
+            // 방법 3: 펄스 쉐이크 (충격파 느낌)
+            // CameraShake.instance.ShakePulse(5, 0.15f, 0.6f);
+        }
+
 
         if (rb != null)
         {
@@ -102,6 +122,7 @@ public class BossEnemy : MonoBehaviour
         {
             col.enabled = false;
         }
+
         StartCoroutine(GameWinRoutine());
         Destroy(gameObject, deathDestroyDelay);
 

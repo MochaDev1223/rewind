@@ -96,7 +96,6 @@ public class Player : MonoBehaviour
 
             // 사망 처리 추가
             CheckDeath();
-
         }
 
         else
@@ -218,7 +217,7 @@ public class Player : MonoBehaviour
         // // 걷기 애니메이션
         anim.SetBool("isWalk", Mathf.Abs(rigid.linearVelocity.x) > 0.2f);      
 
-        // Ground Check
+        // Ground Check (Ground와 Enemy 레이어 모두 체크)
         Vector2 rayOrigin = (Vector2)transform.position
                   + Vector2.up * capsule.offset.y
                   - Vector2.up * (capsule.size.y * 0.5f - 0.02f);
@@ -226,7 +225,7 @@ public class Player : MonoBehaviour
             rayOrigin,
             Vector2.down,
             rayDistance,
-            LayerMask.GetMask("Ground")
+            LayerMask.GetMask("Ground", "Enemy")
         );
 
         Debug.DrawRay(rayOrigin, Vector2.down * rayDistance, Color.green);

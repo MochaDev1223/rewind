@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
     public float returnSpeed = 25f;
     public float maxDistance = 25f;
     public float damage = 1f; // 데미지를 변수로 설정
-    
+
     private Rigidbody2D rigid;
     private Transform player;
     private bool isReturning = false;
@@ -19,15 +19,16 @@ public class Bullet : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
-        
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null) player = playerObj.transform;
     }
 
     public void Launch(Vector2 direction)
     {
-        rigid.linearVelocity = direction * flySpeed;
-        RotateTowards(direction);
+        Vector2 normalizedDirection = direction.normalized;
+        rigid.linearVelocity = normalizedDirection * flySpeed;
+        RotateTowards(normalizedDirection);
     }
 
     void Update()
@@ -93,12 +94,12 @@ public class Bullet : MonoBehaviour
     void HandleEnemyHit(Collider2D enemyCollider)
     {
         Enemy enemy = enemyCollider.GetComponent<Enemy>();
-        
+
         if (enemy != null)
         {
             // 데미지 적용
             enemy.EnemyHP -= damage;
-            
+
             // Hit 애니메이션 재생 (죽지 않았을 때만)
             if (enemy.EnemyHP > 0)
             {
@@ -121,7 +122,7 @@ public class Bullet : MonoBehaviour
     void HandleBossHit(Collider2D bossCollider)
     {
         BossEnemy boss = bossCollider.GetComponent<BossEnemy>();
-        
+
         if (boss != null && boss.IsBattleStarted())
         {
             // 전투 시작 후에만 데미지 적용
@@ -140,7 +141,7 @@ public class Bullet : MonoBehaviour
     {
         // 이펙트 생성
         SpawnEffect();
-        
+
         // 땅에 박힘
         Embed(groundCollider.transform);
     }

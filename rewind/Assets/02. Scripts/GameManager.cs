@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject btnHome;
     public GameObject btnRetry;
     public GameObject btnSetting;
+    public GameObject SettingMenu;
     public GameObject Notice;
 
 
@@ -100,6 +101,24 @@ public class GameManager : MonoBehaviour
         // 메인 메뉴 씬으로 이동
         SceneManager.LoadScene("MainMenu");
         AudioManager.instance.PlayBgm(false);
+    }
+
+    public void OnClickBack()
+    {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select);
+        Time.timeScale = 0f;
+        isPaused = true;
+        PauseMenu.SetActive(true);
+        btnPause.SetActive(false);
+        btnPlay.SetActive(true);
+        SettingMenu.SetActive(false);
+    }
+
+    public void OnClickSetting()
+    {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select);
+        SettingMenu.SetActive(true);
+        PauseMenu.SetActive(false);
     }
 
 }

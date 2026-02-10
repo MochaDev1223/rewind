@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public GameObject btnGameStart;
+    public GameObject SettingMenu;
 
     void Awake()
     {
@@ -18,5 +19,17 @@ public class MainMenu : MonoBehaviour
         // 스테이지 1 시작
         SceneManager.LoadScene("Stage1");
         AudioManager.instance.PlayBgm(false);
+    }
+
+    public void OnClickBack()
+    {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select);
+        SettingMenu.SetActive(false);
+    }
+
+    public void OnClickSetting()
+    {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select);
+        SettingMenu.SetActive(true);
     }
 }

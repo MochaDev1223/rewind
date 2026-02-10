@@ -106,6 +106,8 @@ public class Enemy : MonoBehaviour
         // 애니메이션 트리거
         if (anim != null)
         {
+            anim.SetBool("isWalk", false);
+            anim.ResetTrigger("Hit");
             anim.SetTrigger("isDead");
         }
         AudioManager.instance.PlaySfx(AudioManager.Sfx.EnemyDie);

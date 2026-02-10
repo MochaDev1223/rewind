@@ -1,7 +1,4 @@
-using NUnit.Framework;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class AudioManager : MonoBehaviour
 {
@@ -9,12 +6,12 @@ public class AudioManager : MonoBehaviour
 
     [Header("#BGM")]
     public AudioClip bgmClip;
-    public float bgmVolume;
+    public float bgmVolume = 0.5f;
     AudioSource bgmPlayer;
 
     [Header("#SFX")]
     public AudioClip[] sfxClip;
-    public float sfxVolume;
+    public float sfxVolume = 0.5f;
     public int channels;
     AudioSource[] sfxPlayers;
     int channelIndex;
@@ -29,6 +26,7 @@ public class AudioManager : MonoBehaviour
     {
         instance = this;
         Init();
+        LoadVolumeSettings(); // 저장된 볼륨 설정 불러오기
     }
 
     void Init()
@@ -53,8 +51,8 @@ public class AudioManager : MonoBehaviour
             sfxPlayers[index].playOnAwake = false;
             sfxPlayers[index].volume = sfxVolume;
         }
-
     }
+
     public void PlayBgm(bool isPlay)
     {
         if (isPlay)
@@ -65,7 +63,6 @@ public class AudioManager : MonoBehaviour
         {
             bgmPlayer.Stop();
         }
-            
     }
 
     public void PlaySfx(Sfx sfx)
@@ -81,6 +78,50 @@ public class AudioManager : MonoBehaviour
             sfxPlayers[loopIndex].Play();
             break;
         }
+    }
 
+    // BGM 볼륨 설정
+    public void SetBgmVolume(float volume)
+    {
+        bgmVolume = volume;
+        bgmPlayer.volume = bgmVolume;
+        SaveVolumeSettings();
+    }
+
+    // SFX 볼륨 설정
+    public void SetSfxVolume(float volume)
+    {
+        sfxVolume = volume;
+        foreach (AudioSource sfxPlayer in sfxPlayers)
+        {
+            sfxPlayer.volume = sfxVolume;
+        }
+        SaveVolumeSettings();
+    }
+
+    // 볼륨 설정 저장
+    void SaveVolumeSettings()
+    {
+        PlayerPrefs.SetFloat("BGMVolume", bgmVolume);
+        PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
+        PlayerPrefs.Save();
+    }
+
+    // 볼륨 설정 불러오기
+    void LoadVolumeSettings()
+    {
+        bgmVolume = PlayerPrefs.GetFloat("BGMVolume", 0.5f);
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.5f);
+        
+        if (bgmPlayer != null)
+            bgmPlayer.volume = bgmVolume;
+        
+        if (sfxPlayers != null)
+        {
+            foreach (AudioSource sfxPlayer in sfxPlayers)
+            {
+                sfxPlayer.volume = sfxVolume;
+            }
+        }
     }
 }

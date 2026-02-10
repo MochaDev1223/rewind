@@ -23,12 +23,13 @@ public class AlertTextUI : MonoBehaviour
     {
         Sequence seq = DOTween.Sequence();
 
+        gameObject.SetActive(true);
         alertText.gameObject.SetActive(true);
 
         // 1️⃣ 경보! 침입자 감지!
         seq.AppendCallback(() =>
         {
-            alertText.color = Color.white;
+            alertText.color = Color.black;
             alertText.text = "";
         });
 
