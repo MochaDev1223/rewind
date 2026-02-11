@@ -6237,9 +6237,9 @@ RectTransform:
   - {fileID: 1318970776}
   - {fileID: 922045090}
   - {fileID: 1276233119}
-  - {fileID: 307047714}
   - {fileID: 1844601221}
   - {fileID: 956417384}
+  - {fileID: 307047714}
   - {fileID: 1309709133}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
